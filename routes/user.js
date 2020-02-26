@@ -29,6 +29,7 @@ router.post(
 	}
 );
 //Get the data
+
 router.get('/get', (req, res) => {
 	Users.find({}, (err, data) => {
 		if (err) {
@@ -37,5 +38,37 @@ router.get('/get', (req, res) => {
 		res.send(data);
 	});
 });
+
+// Delete the data
+
+router.delete('/del/:_id', (req, res) => {
+	Users.remove({ email: req.params._id }, (err) => {
+		if (err) {
+			console.log(err)
+		} else {
+			res.send(`successfully deleted`);
+		}
+	})
+})
+
+// update the data
+
+router.put('/edit/:id', (req, res) => {
+	Users.findById(req.params.id, (err, user_data) => {
+		if (err) {
+			console.log(err)
+		} else {
+			user_data.password = req.body.password;
+			user_data.email = req.body.email;
+			user_data.save((err) => {
+				if (err) {
+					console.log(err)
+				} else {
+					res.send(user_data);
+				}
+			})
+		}
+	})
+})
 
 module.exports = router;
